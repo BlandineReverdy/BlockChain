@@ -6,7 +6,7 @@ st.markdown("""
     /* Boutons sidebar */
     .sidebar .stButton > button {
         width: 220px;
-        height: 50px;
+        height: 50px;echo hello
         border-radius: 8px;
         background-color: #4A90E2;
         color: white;
@@ -89,7 +89,9 @@ if st.sidebar.button("Fractionner un lot"):
     st.session_state.page = 'split_lot'
 if st.sidebar.button("Assembler des lots"):
     st.session_state.page = 'assemble_lot'
-
+if st.sidebar.button("Ajouter une transformation"):
+    st.session_state.page = 'add_transformation'
+    
 # ---- Top bar avec recherche ----
 search_query = st.text_input("Rechercher un lot", "", key="search", placeholder="Rechercher un lot...")
 if st.button("🔍 Rechercher"):
@@ -107,12 +109,35 @@ elif st.session_state.page == 'create_lot':
     acteur = st.text_input("Acteur :")
     signature = st.text_input("Signature :")
 
-    if st.button("Créer", key="create_lot_btn", help="Créer le lot", args=None):
+    if st.button("Créer", key="create_lot_btn", help="Cliquer pour valider la création du lot"):
         # Ici, tu peux ajouter le code pour enregistrer les infos dans une DB si besoin
         st.success("Lot créé avec succès !")
 
 elif st.session_state.page == 'quality_control':
-    st.write("Page de contrôle qualité (en cours de développement).")
+    st.write("Ajouter un contrôle qualité")
+    
+    produits = ["-- Choisir un produit --", "Produit A", "Produit B", "Produit C"]
+
+    produit_selectionne = st.selectbox(
+        "Produit :",
+        produits
+    )
+
+    if produit_selectionne != "-- Choisir un produit --":
+        st.success(f"Produit sélectionné : {produit_selectionne}")
+            
+    choix = st.selectbox(
+    "Résultat du contrôle qualité :",
+    ["", "Conforme", "Non conforme"])
+    
+    commentaire = st.text_input("Commentaire :")
+    acteur = st.text_input("Acteur :")
+    signature = st.text_input("Signature :")
+    
+    if st.button("Valider", key="valider_controle_quali", help="Cliquer pour valider les informations"):
+        # ajouter le code pour enregistrer les infos dans une bdd
+        st.success("Contrôle qualité ajouté avec succès !")
+    
 
 elif st.session_state.page == 'transfer_lot':
     st.write("Page de transfert de lot (en cours de développement).")
@@ -122,5 +147,6 @@ elif st.session_state.page == 'split_lot':
 
 elif st.session_state.page == 'assemble_lot':
     st.write("Page d'assemblage de lots (en cours de développement).")
-
-
+    
+elif st.session_state.page == 'add_transformation':
+    st.write("Page d'ajout de transformation (en cours de développement).")
