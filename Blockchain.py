@@ -140,13 +140,94 @@ elif st.session_state.page == 'quality_control':
     
 
 elif st.session_state.page == 'transfer_lot':
-    st.write("Page de transfert de lot (en cours de développement).")
-
-elif st.session_state.page == 'split_lot':
-    st.write("Page de fractionnement de lot (en cours de développement).")
-
-elif st.session_state.page == 'assemble_lot':
-    st.write("Page d'assemblage de lots (en cours de développement).")
+    st.write("Transférer un lot")
     
+    produits = ["-- Choisir un produit --", "Produit A", "Produit B", "Produit C"]
+
+    produit_selectionne = st.selectbox(
+        "Produit :",
+        produits
+    )
+
+    if produit_selectionne != "-- Choisir un produit --":
+        st.success(f"Produit sélectionné : {produit_selectionne}")
+        
+    depuis = st.text_input("De :")
+    vers = st.text_input("Vers :")
+    commentaire = st.text_input("Commentaire :")
+    signature = st.text_input("Signature :")
+    
+    if st.button("Transférer", key="transférer_lot", help="Cliquer pour valider le transfert"):
+        # ajouter le code pour enregistrer les infos dans une bdd
+        st.success("Transfert ajouté avec succès !")
+        
+#Fractionner un lot
+elif st.session_state.page == 'split_lot':
+    st.write("Fractionner un lot")
+    
+    produits = ["-- Choisir un produit --", "Produit A", "Produit B", "Produit C"]
+
+    produit_selectionne = st.selectbox(
+        "Produit :",
+        produits
+    )
+
+    if produit_selectionne != "-- Choisir un produit --":
+        st.success(f"Produit sélectionné : {produit_selectionne}")
+        
+    nouvelle_quantite_1 = st.text_input("Nouvelle quantité 1 : ")
+    nouvelle_quantite_2 = st.text_input("Nouvelle quantité 2 : ")
+    nouvelle_quantite_3 = st.text_input("Nouvelle quantité 3 : ")
+    nouvelle_quantite_4 = st.text_input("Nouvelle quantité 4 : ")
+    
+    signature = st.text_input("signature :")
+    
+    if st.button("Fractionner", key="fractionner_lot", help="Cliquer pour valider le fractionnement"):
+        # ajouter le code pour enregistrer les infos dans une bdd
+        st.success("Fractionnement réalisé avec succès !")
+
+#Assembler un lot
+elif st.session_state.page == 'assemble_lot':
+    st.write("Assembler des lots")
+    
+    produits = ["-- Choisir un produit --", "Produit A", "Produit B", "Produit C"]
+
+    produit_selectionne_1 = st.selectbox("Produit 1 :", produits, key="prod_1")
+    produit_selectionne_2 = st.selectbox("Produit 2 :", produits, key="prod_2")
+    produit_selectionne_3 = st.selectbox("Produit 3 :", produits, key="prod_3")
+
+    if produit_selectionne_1 != "-- Choisir un produit --":
+        st.success(f"Produit sélectionné 1 : {produit_selectionne_1}")
+    if produit_selectionne_2 != "-- Choisir un produit --":
+        st.success(f"Produit sélectionné 2 : {produit_selectionne_2}")
+    if produit_selectionne_3 != "-- Choisir un produit --":
+        st.success(f"Produit sélectionné 3 : {produit_selectionne_3}")
+        
+    nouvelle_quantite = st.text_input("Nouvelle quantité : ")
+    
+    acteur = st.text_input("Acteur :")
+    signature = st.text_input("Signature :")
+    
+    if st.button("Assembler", key="assembler_lot", help="Cliquer pour valider l'assemblage"):
+        # ajouter le code pour enregistrer les infos dans une bdd
+        st.success("Assemblage réalisé avec succès !")
+
+#Ajouter une transformation    
 elif st.session_state.page == 'add_transformation':
-    st.write("Page d'ajout de transformation (en cours de développement).")
+    st.write("Ajouter une transformation")
+    
+    produits = ["-- Choisir un produit --", "Produit A", "Produit B", "Produit C"]
+
+    produit_selectionne = st.selectbox(
+        "Produit :",
+        produits
+    )
+
+    if produit_selectionne != "-- Choisir un produit --":
+        st.success(f"Produit sélectionné : {produit_selectionne}")
+        
+    tranformation_réalisée = st.text_input("Transformation réalisée :")
+    nom_nouv_produit = st.text_input("Nom du nouveau produit :")
+    
+    acteur = st.text_input("Acteur : ")
+    signature = st.text_input("Signature :")
