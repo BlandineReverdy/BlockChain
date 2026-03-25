@@ -1,233 +1,190 @@
 import streamlit as st
 
-# ---- CSS pour un style pro ----
+st.set_page_config(
+    page_title="ChainTrace | Blockchain Agroalimentaire",
+    page_icon="🌿",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# ── CSS global ──────────────────────────────────────────────────────────────
 st.markdown("""
-    <style>
-    /* Boutons sidebar */
-    .sidebar .stButton > button {
-        width: 220px;
-        height: 50px;echo hello
-        border-radius: 8px;
-        background-color: #4A90E2;
-        color: white;
-        font-weight: bold;
-        border: none;
-        margin-bottom: 10px;
-        transition: 0.3s;
-    }
-    .sidebar .stButton > button:hover {
-        background-color: #357ABD;
-    }
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
-    /* Barre de recherche */
-    .top-bar {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-        gap: 10px;
-        padding: 10px 20px;
-        background-color: #F5F5F5;
-        border-bottom: 1px solid #DDD;
-    }
-    .search-input {
-        height: 35px;
-        border-radius: 8px;
-        border: 1px solid #CCC;
-        padding-left: 10px;
-        width: 250px;
-        font-size: 14px;
-    }
-    .search-button {
-        height: 35px;
-        width: 40px;
-        border-radius: 8px;
-        background-color: #4A90E2;
-        color: white;
-        border: none;
-        font-size: 16px;
-        cursor: pointer;
-    }
-    .search-button:hover {
-        background-color: #357ABD;
-    }
+:root {
+    --bg-primary:   #07090f;
+    --bg-card:      #0d1117;
+    --bg-surface:   #111827;
+    --bg-elevated:  #1a2235;
+    --border:       #1e2d45;
+    --border-light: #243352;
+    --accent:       #3b82f6;
+    --accent-soft:  #1d3a6e;
+    --accent-glow:  rgba(59,130,246,0.15);
+    --success:      #10b981;
+    --warning:      #f59e0b;
+    --danger:       #ef4444;
+    --text-primary: #e2e8f0;
+    --text-secondary:#94a3b8;
+    --text-muted:   #475569;
+}
 
-    /* Bouton vert créer */
-    .stButton > button.create-btn {
-        background-color: #4CAF50;
-        color: white;
-        font-weight: bold;
-        border-radius: 8px;
-        height: 45px;
-        width: 150px;
-    }
-    .stButton > button.create-btn:hover {
-        background-color: #45A049;
-    }
+* { font-family: 'Space Grotesk', sans-serif !important; }
 
-    /* Zones de texte */
-    .stTextInput > div > input {
-        border-radius: 6px;
-        border: 1px solid #CCC;
-        padding: 8px;
-    }
-    </style>
+/* Hide default Streamlit chrome */
+#MainMenu, footer { visibility: hidden; }
+header {
+    background: transparent !important;
+    height: 0px !important;
+}
+
+header > div {
+    display: none !important;
+}
+
+[data-testid="stAppViewBlockContainer"] {
+    padding-top: 0rem !important;
+}
+[data-testid="stAppViewBlockContainer"] { padding-top: 1rem; }
+
+/* Page background */
+.stApp { background-color: var(--bg-primary); color: var(--text-primary); }
+
+/* ── Sidebar ──────────────────────────────────────────────────────────── */
+[data-testid="stSidebar"] {
+    background: var(--bg-card) !important;
+    border-right: 1px solid var(--border) !important;
+}
+[data-testid="stSidebar"] * { color: var(--text-primary) !important; }
+
+/* Nav links */
+[data-testid="stSidebarNavLink"] {
+    border-radius: 8px !important;
+    margin: 2px 8px !important;
+    padding: 10px 16px !important;
+    transition: all 0.2s !important;
+    color: var(--text-secondary) !important;
+    font-weight: 500 !important;
+    font-size: 0.9rem !important;
+}
+[data-testid="stSidebarNavLink"]:hover {
+    background: var(--bg-elevated) !important;
+    color: var(--text-primary) !important;
+}
+[data-testid="stSidebarNavLink"][aria-current="page"] {
+    background: var(--accent-soft) !important;
+    color: var(--accent) !important;
+    border-left: 3px solid var(--accent) !important;
+}
+
+/* Cards */
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+.card:hover { border-color: var(--border-light); }
+
+/* Inputs */
+[data-baseweb="input"] input,
+[data-baseweb="textarea"] textarea,
+[data-baseweb="select"] div {
+    background: var(--bg-surface) !important;
+    border-color: var(--border) !important;
+    color: var(--text-primary) !important;
+    border-radius: 8px !important;
+    font-family: 'Space Grotesk', sans-serif !important;
+}
+[data-baseweb="input"] input:focus,
+[data-baseweb="textarea"] textarea:focus {
+    border-color: var(--accent) !important;
+    box-shadow: 0 0 0 3px var(--accent-glow) !important;
+}
+
+/* Buttons */
+[data-testid="stButton"] > button {
+    background: var(--accent) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    padding: 0.6rem 1.4rem !important;
+    transition: all 0.2s !important;
+    letter-spacing: 0.02em !important;
+}
+[data-testid="stButton"] > button:hover {
+    background: #2563eb !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 15px rgba(59,130,246,0.3) !important;
+}
+
+/* Success/Error messages */
+[data-testid="stAlert"] {
+    border-radius: 8px !important;
+    border: 1px solid !important;
+}
+
+/* Labels */
+label { color: var(--text-secondary) !important; font-size: 0.85rem !important; font-weight: 500 !important; text-transform: uppercase !important; letter-spacing: 0.05em !important; }
+
+/* Metrics */
+[data-testid="stMetric"] {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 12px !important;
+    padding: 1.2rem 1.5rem !important;
+}
+[data-testid="stMetricValue"] { color: var(--text-primary) !important; font-weight: 700 !important; font-size: 2rem !important; }
+[data-testid="stMetricLabel"] { color: var(--text-secondary) !important; font-size: 0.8rem !important; text-transform: uppercase; letter-spacing: 0.08em; }
+[data-testid="stMetricDelta"] { font-size: 0.85rem !important; }
+
+/* Divider */
+hr { border-color: var(--border) !important; margin: 1.5rem 0 !important; }
+
+/* Select boxes */
+[data-baseweb="select"] [data-testid="stMarkdownContainer"] p { color: var(--text-primary) !important; }
+
+/* Page titles */
+h1 { color: var(--text-primary) !important; font-weight: 700 !important; font-size: 1.8rem !important; letter-spacing: -0.02em !important; }
+h2 { color: var(--text-primary) !important; font-weight: 600 !important; font-size: 1.3rem !important; }
+h3 { color: var(--text-secondary) !important; font-weight: 500 !important; font-size: 1rem !important; }
+p { color: var(--text-secondary) !important; }
+
+/* Dataframe */
+[data-testid="stDataFrame"] {
+    background: var(--bg-card) !important;
+    border-radius: 10px !important;
+    border: 1px solid var(--border) !important;
+    overflow: hidden !important;
+}
+</style>
 """, unsafe_allow_html=True)
 
-# ---- Gestion de la "page" via session_state ----
-if 'page' not in st.session_state:
-    st.session_state.page = 'home'
+# Sidebar logo
+st.sidebar.markdown("""
+<div style="padding: 1.5rem 1rem 1rem; border-bottom: 1px solid #1e2d45; margin-bottom: 0.5rem;">
+    <div style="display:flex; align-items:center; gap:10px;">
+        <div style="width:36px;height:36px;background:linear-gradient(135deg,#3b82f6,#1d4ed8);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">🌿</div>
+        <div>
+            <div style="color:#e2e8f0;font-weight:700;font-size:1.1rem;letter-spacing:-0.02em;">ChainTrace</div>
+            <div style="color:#475569;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;">Blockchain Agro</div>
+        </div>
+    </div>
+</div>
+""", unsafe_allow_html=True)
 
-# ---- Sidebar Menu ----
-st.sidebar.title("Que voulez-vous faire ?")
-if st.sidebar.button("Créer un lot"):
-    st.session_state.page = 'create_lot'
-if st.sidebar.button("Ajouter un contrôle qualité"):
-    st.session_state.page = 'quality_control'
-if st.sidebar.button("Transférer le lot"):
-    st.session_state.page = 'transfer_lot'
-if st.sidebar.button("Fractionner un lot"):
-    st.session_state.page = 'split_lot'
-if st.sidebar.button("Assembler des lots"):
-    st.session_state.page = 'assemble_lot'
-if st.sidebar.button("Ajouter une transformation"):
-    st.session_state.page = 'add_transformation'
-    
-# ---- Top bar avec recherche ----
-search_query = st.text_input("Rechercher un lot", "", key="search", placeholder="Rechercher un lot...")
-if st.button("🔍 Rechercher"):
-    st.write(f"Résultats pour : {search_query}")
-
-# ---- Pages ----
-if st.session_state.page == 'home':
-    st.write("Bienvenue sur le tableau de bord.")
-
-elif st.session_state.page == 'create_lot':
-    st.title("Créer un lot")
-
-    produit = st.text_input("Produit :")
-    quantite = st.text_input("Quantité :")
-    acteur = st.text_input("Acteur :")
-    signature = st.text_input("Signature :")
-
-    if st.button("Créer", key="create_lot_btn", help="Cliquer pour valider la création du lot"):
-        # Ici, tu peux ajouter le code pour enregistrer les infos dans une DB si besoin
-        st.success("Lot créé avec succès !")
-
-elif st.session_state.page == 'quality_control':
-    st.write("Ajouter un contrôle qualité")
-    
-    produits = ["-- Choisir un produit --", "Produit A", "Produit B", "Produit C"]
-
-    produit_selectionne = st.selectbox(
-        "Produit :",
-        produits
-    )
-
-    if produit_selectionne != "-- Choisir un produit --":
-        st.success(f"Produit sélectionné : {produit_selectionne}")
-            
-    choix = st.selectbox(
-    "Résultat du contrôle qualité :",
-    ["", "Conforme", "Non conforme"])
-    
-    commentaire = st.text_input("Commentaire :")
-    acteur = st.text_input("Acteur :")
-    signature = st.text_input("Signature :")
-    
-    if st.button("Valider", key="valider_controle_quali", help="Cliquer pour valider les informations"):
-        # ajouter le code pour enregistrer les infos dans une bdd
-        st.success("Contrôle qualité ajouté avec succès !")
-    
-
-elif st.session_state.page == 'transfer_lot':
-    st.write("Transférer un lot")
-    
-    produits = ["-- Choisir un produit --", "Produit A", "Produit B", "Produit C"]
-
-    produit_selectionne = st.selectbox(
-        "Produit :",
-        produits
-    )
-
-    if produit_selectionne != "-- Choisir un produit --":
-        st.success(f"Produit sélectionné : {produit_selectionne}")
-        
-    depuis = st.text_input("De :")
-    vers = st.text_input("Vers :")
-    commentaire = st.text_input("Commentaire :")
-    signature = st.text_input("Signature :")
-    
-    if st.button("Transférer", key="transférer_lot", help="Cliquer pour valider le transfert"):
-        # ajouter le code pour enregistrer les infos dans une bdd
-        st.success("Transfert ajouté avec succès !")
-        
-#Fractionner un lot
-elif st.session_state.page == 'split_lot':
-    st.write("Fractionner un lot")
-    
-    produits = ["-- Choisir un produit --", "Produit A", "Produit B", "Produit C"]
-
-    produit_selectionne = st.selectbox(
-        "Produit :",
-        produits
-    )
-
-    if produit_selectionne != "-- Choisir un produit --":
-        st.success(f"Produit sélectionné : {produit_selectionne}")
-        
-    nouvelle_quantite_1 = st.text_input("Nouvelle quantité 1 : ")
-    nouvelle_quantite_2 = st.text_input("Nouvelle quantité 2 : ")
-    nouvelle_quantite_3 = st.text_input("Nouvelle quantité 3 : ")
-    nouvelle_quantite_4 = st.text_input("Nouvelle quantité 4 : ")
-    
-    signature = st.text_input("signature :")
-    
-    if st.button("Fractionner", key="fractionner_lot", help="Cliquer pour valider le fractionnement"):
-        # ajouter le code pour enregistrer les infos dans une bdd
-        st.success("Fractionnement réalisé avec succès !")
-
-#Assembler un lot
-elif st.session_state.page == 'assemble_lot':
-    st.write("Assembler des lots")
-    
-    produits = ["-- Choisir un produit --", "Produit A", "Produit B", "Produit C"]
-
-    produit_selectionne_1 = st.selectbox("Produit 1 :", produits, key="prod_1")
-    produit_selectionne_2 = st.selectbox("Produit 2 :", produits, key="prod_2")
-    produit_selectionne_3 = st.selectbox("Produit 3 :", produits, key="prod_3")
-
-    if produit_selectionne_1 != "-- Choisir un produit --":
-        st.success(f"Produit sélectionné 1 : {produit_selectionne_1}")
-    if produit_selectionne_2 != "-- Choisir un produit --":
-        st.success(f"Produit sélectionné 2 : {produit_selectionne_2}")
-    if produit_selectionne_3 != "-- Choisir un produit --":
-        st.success(f"Produit sélectionné 3 : {produit_selectionne_3}")
-        
-    nouvelle_quantite = st.text_input("Nouvelle quantité : ")
-    
-    acteur = st.text_input("Acteur :")
-    signature = st.text_input("Signature :")
-    
-    if st.button("Assembler", key="assembler_lot", help="Cliquer pour valider l'assemblage"):
-        # ajouter le code pour enregistrer les infos dans une bdd
-        st.success("Assemblage réalisé avec succès !")
-
-#Ajouter une transformation    
-elif st.session_state.page == 'add_transformation':
-    st.write("Ajouter une transformation")
-    
-    produits = ["-- Choisir un produit --", "Produit A", "Produit B", "Produit C"]
-
-    produit_selectionne = st.selectbox(
-        "Produit :",
-        produits
-    )
-
-    if produit_selectionne != "-- Choisir un produit --":
-        st.success(f"Produit sélectionné : {produit_selectionne}")
-        
-    tranformation_réalisée = st.text_input("Transformation réalisée :")
-    nom_nouv_produit = st.text_input("Nom du nouveau produit :")
-    
-    acteur = st.text_input("Acteur : ")
-    signature = st.text_input("Signature :")
+pg = st.navigation([
+    st.Page("pages/1_accueil.py",          title="Accueil",               icon="🏠"),
+    st.Page("pages/2_visualiser_blockchain.py",title="Visualiser la blockchain", icon="🔗"),
+    st.Page("pages/3_creer_lot.py",         title="Créer un lot",          icon="📦"),
+    st.Page("pages/4_controle_qualite.py",  title="Contrôle qualité",      icon="✅"),
+    st.Page("pages/5_transfert.py",         title="Transférer un lot",     icon="🚚"),
+    st.Page("pages/6_fractionner.py",       title="Fractionner un lot",    icon="✂️"),
+    st.Page("pages/7_assembler.py",         title="Assembler des lots",    icon="🔀"),
+    st.Page("pages/8_transformation.py",   title="Ajouter une transformation", icon="🏭"),
+])
+pg.run()
