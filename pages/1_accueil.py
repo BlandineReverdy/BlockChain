@@ -3,7 +3,7 @@ import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 try:
-    from utils.supabase_client import get_supabase
+    from outils.supabase_client import get_supabase
     supabase = get_supabase()
     _db = True
 except Exception:
