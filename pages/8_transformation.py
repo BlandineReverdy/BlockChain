@@ -95,7 +95,7 @@ with col_info:
     </div>
     <div style="color:#94a3b8;font-size:0.88rem;line-height:1.7;">
         La transformation est une étape clé de la valeur ajoutée.<br><br>
-        En signant cette opération, vous engagez la responsabilité de votre entité sur la qualité du nouveau produit <b>{nom_final if submitted and est_valide else ""}</b>.
+        En signant cette opération, vous engagez la responsabilité de votre entité sur la qualité du nouveau produit.
     </div>
 </div>
 """, unsafe_allow_html=True)
